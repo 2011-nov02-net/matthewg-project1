@@ -26,7 +26,7 @@ namespace Project1.Library.Interfaces {
         void UpdateProduct(Product product);
         void RemoveProduct(Product product);
         void UpdateLocationStock(Location location, Product product);
-        List<Order> GetCustomerOrders(Customer customer);
+        List<Order> GetCustomerOrders(IUser customer);
         List<Order> GetLocationOrders(Location location);
         void Save();
     }

@@ -83,7 +83,7 @@ namespace Project1.DataModel.Repositories {
                     Order = dbOrder,
                     Product = product,
                     Quantity = item.Value,
-                    Price = order.Location.Prices[item.Key]
+                    Price = order.PricePaid[item.Key]
                 };
 
                 _dbContext.OrderContents.Add(dbOrderContent);
@@ -304,7 +304,7 @@ namespace Project1.DataModel.Repositories {
         /// Retrieve all orders in the database submitted by a particular customer
         /// </summary>
         /// <returns>A list of Business-Model order objects</returns>
-        public List<Library.Models.Order> GetCustomerOrders(Library.Models.Customer customer) {
+        public List<Library.Models.Order> GetCustomerOrders(IUser customer) {
             var dbOrders = _dbContext.Orders
                 .Where(o => o.CustomerId == customer.Id)
                 .OrderByDescending(o => o.Date).ToList();

@@ -71,10 +71,14 @@ namespace Project1.WebApp.Controllers {
 
                 var dbCustomer = _repository.GetCustomerByEmail(customer.Email);
 
-                TempData["CurrentCustomer"] = dbCustomer.Id;
-                TempData["CustomerName"] = dbCustomer.FirstName;
+                if (!TempData.ContainsKey("CurrentCustomer")) {
+                    TempData["CurrentCustomer"] = dbCustomer.Id;
+                    TempData["CustomerName"] = dbCustomer.FirstName;
 
-                return RedirectToAction(nameof(Index), "Home");
+                    return RedirectToAction(nameof(Index), "Home");
+                }
+
+                return RedirectToAction(nameof(Index));
             } catch {
                 ModelState.AddModelError("", "Error registering new customer.");
                 return View(viewModel);
@@ -152,7 +156,7 @@ namespace Project1.WebApp.Controllers {
             }
             try {
                 var customer = _repository.GetCustomerById(id);
-                _repository.RemoveCustomer(customer);
+                _repository.RemoveCustomer(customer); // Not implemented in repository
                 _repository.Save();
                 return RedirectToAction(nameof(Index));
             } catch {

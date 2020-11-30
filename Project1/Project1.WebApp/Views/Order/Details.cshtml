@@ -1,0 +1,87 @@
+﻿@model Project1.WebApp.Models.OrderViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+        <dt class="col-sm-2">
+            Location Name
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-controller="Location" asp-action="Details" asp-route-id="@Model.Location.Id">@Html.DisplayFor(model => model.Location.Name)</a>
+        </dd>
+        <dt class="col-sm-2">
+            Customer Name
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-controller="Customer" asp-action="Details" asp-route-id="@Model.Customer.Id">@Html.DisplayFor(model => model.Customer.LastName), @Html.DisplayFor(model => model.Customer.FirstName)</a>
+        </dd>
+    </dl>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Product ID
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Price
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Products) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Key.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Key.DisplayName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @{
+                            decimal price = Model.PricePaid[item.Key] * item.Value;
+                            @string.Format("{0:c}", price)
+                        }
+                    </td>
+                </tr>
+             }
+        </tbody>
+    </table>
+    <p>
+        Total: @Html.DisplayFor(model => model.TotalPrice)
+    </p>
+</div>
+<div>
+    @if (TempData.ContainsKey("IsAdmin")) {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
+    }
+
+    <a asp-action="Index">Back to List</a>
+</div>

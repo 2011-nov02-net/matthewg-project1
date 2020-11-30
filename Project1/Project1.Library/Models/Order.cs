@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Project1.Library.Interfaces;
+using System;
 using System.Collections.Generic;
 
 namespace Project1.Library.Models {
@@ -7,15 +8,15 @@ namespace Project1.Library.Models {
         public Dictionary<Product, int> Products { get; set; }
         public Dictionary<Product, decimal> PricePaid { get; set; }
         public Location Location { get; set; }
-        public Customer Customer { get; set; }
+        public IUser Customer { get; set; }
         public DateTime Time { get; set; }
 
         public Order() {
             Products = new Dictionary<Product, int>();
         }
 
-        public Order(Location location, Customer customer, DateTime time) {
-            Products = customer.Cart;
+        public Order(Location location, IUser customer, DateTime time, Dictionary<Product, int> products) {
+            Products = products;
             Location = location;
             Customer = customer;
             Time = time;

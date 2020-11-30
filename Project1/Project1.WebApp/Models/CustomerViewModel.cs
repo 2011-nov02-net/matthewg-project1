@@ -18,8 +18,9 @@ namespace Project1.WebApp.Models {
         [Required]
         public string LastName { get; set; }
 
-        [RegularExpression("^(.+)(@)(.+)[.](.+)$", ErrorMessage = "Invalid email format.")]
+        // [RegularExpression("^(.+)(@)(.+)[.](.+)$", ErrorMessage = "Invalid email format.")]
         [Required]
+        [EmailAddress]
         public string Email { get; set; }
     }
 }
