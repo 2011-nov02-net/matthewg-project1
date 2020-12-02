@@ -10,12 +10,12 @@ namespace Project1.Library.Models {
         public string Country { get; }
         public string Zip { get; }
         public string Phone { get; set; }
-        public Dictionary<Product, int> Stock { get; set; }
-        public Dictionary<Product, decimal> Prices { get; set; }
+        public Dictionary<int, int> Stock { get; set; }
+        public Dictionary<int, decimal> Prices { get; set; }
 
         public Location() {
-            Stock = new Dictionary<Product, int>();
-            Prices = new Dictionary<Product, decimal>();
+            Stock = new Dictionary<int, int>();
+            Prices = new Dictionary<int, decimal>();
         }
 
         public Location(string name, string address, string city, string state, string country, string zip, string phone) {
@@ -26,8 +26,8 @@ namespace Project1.Library.Models {
             Country = country;
             Zip = zip;
             Phone = phone;
-            Stock = new Dictionary<Product, int>();
-            Prices = new Dictionary<Product, decimal>();
+            Stock = new Dictionary<int, int>();
+            Prices = new Dictionary<int, decimal>();
         }
 
         /// <summary>
@@ -36,15 +36,15 @@ namespace Project1.Library.Models {
         /// <param name="product">Product object thats stock is to be modified</param>
         /// <param name="qty">Integer value by how much to modify the stock</param>
         /// <returns>True if succeeded in modifying the stock amount. False if there was an attempt to input a negative amount for a non-yet-stocked product</returns>
-        public bool AddStock(Product product, int qty) {
-            if (Stock.ContainsKey(product)) {
-                if (qty < 0 && System.Math.Abs(qty) > Stock[product]) {
+        public bool AddStock(int productId, int qty) {
+            if (Stock.ContainsKey(productId)) {
+                if (qty < 0 && System.Math.Abs(qty) > Stock[productId]) {
                     return false;
                 }
-                Stock[product] += qty;
+                Stock[productId] += qty;
                 return true;
             } else if (qty > 0) {
-                Stock.Add(product, qty);
+                Stock.Add(productId, qty);
                 return true;
             }
             return false;
@@ -56,15 +56,15 @@ namespace Project1.Library.Models {
         /// <param name="product">Product object thats price is to be modified</param>
         /// <param name="price">decimal floating point number</param>
         /// <returns>True if price was successfully set. False if price is 0 or below</returns>
-        public bool AddPrice(Product product, decimal price) {
+        public bool AddPrice(int productId, decimal price) {
             if (price <= 0) {
                 return false;
             }
-            if (Prices.ContainsKey(product)) {
-                Prices[product] = price;
+            if (Prices.ContainsKey(productId)) {
+                Prices[productId] = price;
                 return true;
             } else {
-                Prices.Add(product, price);
+                Prices.Add(productId, price);
                 return true;
             }
         }

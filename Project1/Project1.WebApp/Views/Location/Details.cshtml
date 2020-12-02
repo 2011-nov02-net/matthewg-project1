@@ -80,10 +80,10 @@
             @foreach (var item in Model.Stock) {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Key.Id)
+                        @Html.DisplayFor(modelItem => item.Key)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Key.DisplayName)
+                        @ViewData[item.Key.ToString()]
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Value)

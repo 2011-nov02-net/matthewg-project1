@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project1.Library.Interfaces;
 using Project1.Library.Models;
 using Project1.WebApp.Models;
@@ -59,36 +60,76 @@ namespace Project1.WebApp.Controllers {
                 PricePaid = order.PricePaid,
                 TotalPrice = totalPrice
             };
-
+            foreach (var product in viewModel.Products) {
+                ViewData[product.Key.ToString()] = _repository.GetProductById(product.Key).DisplayName;
+            }
             return View(viewModel);
         }
 
         // GET: ProductController/Create
         public ActionResult Create(int id) {
-            var location = _repository.GetLocationById(id);
+            Location location;
+            try {
+                location = _repository.GetLocationById(id);
+            } catch {
+                return StatusCode(404);
+            }
             var viewModel = new OrderViewModel() {
                 Location = location
             };
+            foreach (var product in location.Stock) {
+                viewModel.Products[product.Key] = 0;
+                ViewData[product.Key.ToString()] = _repository.GetProductById(product.Key).DisplayName;
+            }
             return View(viewModel);
         }
 
         // POST: ProductController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(OrderViewModel viewModel) {
+        public ActionResult Create(int id, OrderViewModel viewModel) {
             if (!ModelState.IsValid) {
                 return View(viewModel);
             }
+            Location location;
+            IUser customer;
+            Order order;
             try {
-                var customer = _repository.GetCustomerById((int)TempData.Peek("CurrentCustomer"));
-                //var order = new Order(viewModel.Location, customer, DateTime.Now,);
+                location = _repository.GetLocationById(id);
+                customer = _repository.GetCustomerById((int)TempData.Peek("CurrentCustomer"));
+                order = new Order(location, customer, DateTime.Now, viewModel.Products);
+            } catch {
+                return StatusCode(404);
+            }
 
-                //_repository.AddOrder(order);
-                //_repository.Save();
+            try {
+                foreach (var item in order.Products) {
+                    if (item.Value < 0) {
+                        ModelState.AddModelError("", "Cannot place an order for negative stock");
+                        viewModel.Location = location;
+                        return View(viewModel);
+                    }
+                    if (item.Value > location.Stock[item.Key]) {
+                        ModelState.AddModelError("", "Insufficient stock to supply requested order.");
+                        viewModel.Location = location;
+                        return View(viewModel);
+                    }
+                }
+
+                foreach (var item in order.Products) {
+                    location.AddStock(item.Key, -item.Value);
+                }
+
+                _repository.AddOrder(order);
+                _repository.UpdateLocationStock(location);
+                _repository.Save();
 
                 return RedirectToAction(nameof(Index));
-            } catch {
-                ModelState.AddModelError("", "Error creating new product.");
+            } catch (DbUpdateException) {
+                foreach (var item in order.Products) {
+                    location.AddStock(item.Key, item.Value);
+                }
+                ModelState.AddModelError("", "Error creating new order.");
                 return View(viewModel);
             }
         }

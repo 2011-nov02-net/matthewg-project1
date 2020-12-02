@@ -6,9 +6,11 @@
 
 <h1>Locations List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (TempData.ContainsKey("IsAdmin")) {
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -34,35 +36,35 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = item.Id })
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", new { id = item.Id })
 
-                @if (TempData.ContainsKey("IsAdmin")) {
-                    @:| @Html.ActionLink("Edit", "Edit", new { id = item.Id })
-                    @:| @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                }
-            </td>
-        </tr>
-}
+                    @if (TempData.ContainsKey("IsAdmin")) {
+                        @:| @Html.ActionLink("Edit", "Edit", new { id = item.Id })
+                        @:| @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -52,6 +52,9 @@ namespace Project1.WebApp.Controllers {
                 Prices = location.Prices
 
             };
+            foreach (var product in viewModel.Stock) {
+                ViewData[product.Key.ToString()] = _repository.GetProductById(product.Key).DisplayName;
+            }
             return View(viewModel);
         }
 

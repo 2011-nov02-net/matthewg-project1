@@ -27,6 +27,9 @@ namespace Project1.WebApp.Controllers {
         }
 
         public IActionResult Login() {
+            if (TempData.ContainsKey("CurrentCustomer")) {
+                return RedirectToAction(nameof(Index));
+            }
             return View();
         }
 

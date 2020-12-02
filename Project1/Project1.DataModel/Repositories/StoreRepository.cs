@@ -77,7 +77,7 @@ namespace Project1.DataModel.Repositories {
             _dbContext.Orders.Add(dbOrder);
 
             foreach (var item in order.Products) {
-                var product = _dbContext.Products.First(p => p.Id == item.Key.Id);
+                var product = _dbContext.Products.First(p => p.Id == item.Key);
 
                 var dbOrderContent = new OrderContent() {
                     Order = dbOrder,
@@ -215,12 +215,11 @@ namespace Project1.DataModel.Repositories {
                     .ThenInclude(li => li.Product)
                 .First(l => l.Id == id);
 
-            Dictionary<Library.Models.Product, int> stock = new Dictionary<Library.Models.Product, int>();
-            Dictionary<Library.Models.Product, decimal> prices = new Dictionary<Library.Models.Product, decimal>();
+            Dictionary<int, int> stock = new Dictionary<int, int>();
+            Dictionary<int, decimal> prices = new Dictionary<int, decimal>();
             foreach (LocationInventory li in dbLocation.LocationInventories) {
-                Library.Models.Product product = new Library.Models.Product() { Id = li.ProductId, DisplayName = li.Product.Name };
-                stock.Add(product, li.Stock);
-                prices.Add(product, li.Price);
+                stock.Add(li.ProductId, li.Stock);
+                prices.Add(li.ProductId, li.Price);
             }
 
             return new Library.Models.Location(
@@ -276,12 +275,11 @@ namespace Project1.DataModel.Repositories {
                 Email = dbOrder.Customer.Email
             };
 
-            Dictionary<Library.Models.Product, int> products = new Dictionary<Library.Models.Product, int>();
-            Dictionary<Library.Models.Product, decimal> prices = new Dictionary<Library.Models.Product, decimal>();
+            Dictionary<int, int> products = new Dictionary<int, int>();
+            Dictionary<int, decimal> prices = new Dictionary<int, decimal>();
             foreach (OrderContent oc in dbOrder.OrderContents) {
-                Library.Models.Product product = new Library.Models.Product() { Id = oc.ProductId, DisplayName = oc.Product.Name };
-                products.Add(product, oc.Quantity);
-                prices.Add(product, oc.Price);
+                products.Add(oc.ProductId, oc.Quantity);
+                prices.Add(oc.ProductId, oc.Price);
             }
 
             return new Library.Models.Order() { Id = dbOrder.Id, Products = products, PricePaid = prices, Customer = customer, Location = location, Time = dbOrder.Date };
@@ -292,7 +290,7 @@ namespace Project1.DataModel.Repositories {
         /// </summary>
         /// <returns>A group of Business-Model order objects</returns>
         public List<Library.Models.Order> GetOrders() {
-            var dbOrders = _dbContext.Orders.OrderByDescending(o => o.Date).ToList();
+            var dbOrders = _dbContext.Orders.OrderByDescending(o => o.Id).ToList();
             List<Library.Models.Order> orders = new List<Library.Models.Order>();
             foreach (var order in dbOrders) {
                 orders.Add(GetOrderById(order.Id));
@@ -307,7 +305,7 @@ namespace Project1.DataModel.Repositories {
         public List<Library.Models.Order> GetCustomerOrders(IUser customer) {
             var dbOrders = _dbContext.Orders
                 .Where(o => o.CustomerId == customer.Id)
-                .OrderByDescending(o => o.Date).ToList();
+                .OrderByDescending(o => o.Id).ToList();
             List<Library.Models.Order> orders = new List<Library.Models.Order>();
             foreach (var order in dbOrders) {
                 orders.Add(GetOrderById(order.Id));
@@ -386,22 +384,26 @@ namespace Project1.DataModel.Repositories {
         /// <param name="location">Business-Model location object</param>
         /// <param name="product">Business-Model product object</param>
         /// <param name="qty">integer number of items to add</param>
-        public void UpdateLocationStock(Library.Models.Location location, Library.Models.Product product) {
-            LocationInventory dbLocationInventory;
-            try {
-                dbLocationInventory = _dbContext.LocationInventories.First(x => x.LocationId == location.Id && x.ProductId == product.Id);
-                dbLocationInventory.Stock = location.Stock[product];
-            } catch (InvalidOperationException) {
-                var dbLocation = _dbContext.Locations.First(l => l.Id == location.Id);
-                var dbProduct = _dbContext.Products.First(p => p.Id == product.Id);
-                dbLocationInventory = new LocationInventory() {
-                    Location = dbLocation,
-                    Product = dbProduct,
-                    Stock = location.Stock[product],
-                    Price = location.Prices[product]
-                };
-                _dbContext.LocationInventories.Add(dbLocationInventory);
+        public void UpdateLocationStock(Library.Models.Location location) {
+            foreach (var product in location.Stock) {
+                int productId = product.Key;
+                LocationInventory dbLocationInventory;
+                try {
+                    dbLocationInventory = _dbContext.LocationInventories.First(x => x.LocationId == location.Id && x.ProductId == productId);
+                    dbLocationInventory.Stock = location.Stock[productId];
+                } catch (InvalidOperationException) {
+                    var dbLocation = _dbContext.Locations.First(l => l.Id == location.Id);
+                    var dbProduct = _dbContext.Products.First(p => p.Id == productId);
+                    dbLocationInventory = new LocationInventory() {
+                        Location = dbLocation,
+                        Product = dbProduct,
+                        Stock = location.Stock[productId],
+                        Price = location.Prices[productId]
+                    };
+                    _dbContext.LocationInventories.Add(dbLocationInventory);
+                }
             }
+            
         }
 
         /// <summary>

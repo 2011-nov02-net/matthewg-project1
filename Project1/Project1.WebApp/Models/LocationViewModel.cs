@@ -34,10 +34,10 @@ namespace Project1.WebApp.Models {
         public string Phone { get; set; }
 
         
-        public Dictionary<Product, int> Stock { get; set; }
+        public Dictionary<int, int> Stock { get; set; }
 
 
-        public Dictionary<Product, decimal> Prices { get; set; }
+        public Dictionary<int, decimal> Prices { get; set; }
 
     }
 }

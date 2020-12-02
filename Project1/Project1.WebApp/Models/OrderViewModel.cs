@@ -9,9 +9,14 @@ using System.Threading.Tasks;
 namespace Project1.WebApp.Models {
     public class OrderViewModel {
 
+        public OrderViewModel() {
+            Products = new Dictionary<int, int>();
+            PricePaid = new Dictionary<int, decimal>();
+        }
+
         public int Id { get; set; }
-        public Dictionary<Product, int> Products { get; set; }
-        public Dictionary<Product, decimal> PricePaid { get; set; }
+        public Dictionary<int, int> Products { get; set; }
+        public Dictionary<int, decimal> PricePaid { get; set; }
         public Location Location { get; set; }
         public IUser Customer { get; set; }
 
