@@ -43,7 +43,7 @@ steps:
     organization: '2011-nov02-net'
     scannerMode: 'MSBuild'
     projectKey: '2011-nov02-net_matthewg-project1'
-    projectName: 'Project1 Store App'
+    projectName: 'Matt G - Project1'
     extraProperties: 'sonar.exclusions=**/lib/**'
 
 - task: UseDotNet@2
