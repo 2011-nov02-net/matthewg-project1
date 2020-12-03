@@ -31,6 +31,22 @@ variables:
 # the two most common types of steps are "script" and "task"
 steps:
 - task: UseDotNet@2
+  displayName: 'Use .NET 2.x SDK'
+  inputs:
+    packageType: 'sdk'
+    version: 2.x
+
+- task: SonarCloudPrepare@1
+  displayName: sonar prepare analysis
+  inputs:
+    SonarCloud: 'sonarcloud-mgoodm'
+    organization: '2011-nov02-net'
+    scannerMode: 'MSBuild'
+    projectKey: '2011-nov02-net_matthewg-project1'
+    projectName: 'Project1 Store App'
+    extraProperties: 'sonar.exclusions=**/lib/**'
+
+- task: UseDotNet@2
   displayName: 'Use .NET $(sdkVersion) SDK'
   inputs:
     packageType: 'sdk'
@@ -39,6 +55,14 @@ steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: dotnet build
   workingDirectory: Project1
+
+- task: SonarCloudAnalyze@1
+  displayName: sonar run analysis
+
+- task: SonarCloudPublish@1
+  displayName: sonar analysis results
+  inputs:
+    pollingTimeoutSec: '300'
 
 - task: DotNetCoreCLI@2
   displayName: dotnet test
