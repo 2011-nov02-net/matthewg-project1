@@ -1,0 +1,62 @@
+# this file defines a pipeline, a set of rules for building and validating the source code in a repo
+# it's written in a format called YAML
+
+# trigger defines when the pipeline will run.
+# list of branches syntax:
+# trigger:
+# - main
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - azure-pipelines.yml
+    - Project1
+
+# short for "agent pool" as in "build agent"
+# i.e. what set of machines will be the build agents to run these steps.
+pool:
+  vmImage: ubuntu-latest
+
+# variables common to multiple steps
+variables:
+  sdkVersion: 5.x
+  buildConfiguration: Release
+
+# these steps are run in sequence by the build agent,
+# in a directory that contains the most recent push on that branch of that repo
+# if any step fails, that will halt the build and subsequent steps will not run.
+
+# the two most common types of steps are "script" and "task"
+steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET $(sdkVersion) SDK'
+  inputs:
+    packageType: 'sdk'
+    version: $(sdkVersion)
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: dotnet build
+  workingDirectory: Project1
+
+- task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: 'test'
+    arguments: '--configuration $(buildConfiguration)'
+    publishTestResults: true
+    workingDirectory: Project1
+
+- script: dotnet publish --configuration $(buildConfiguration) --output publish
+  displayName: dotnet publish
+  workingDirectory: Project1
+
+- task: AzureRmWebAppDeployment@4
+  displayName: azure app service deploy
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure subscription 1(7661b4a7-b474-45ce-b07e-9c051aac7045)'
+    appType: 'webApp'
+    WebAppName: '2011-goodman-store-app'
+    packageForLinux: 'Project1/publish'
