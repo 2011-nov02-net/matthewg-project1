@@ -31,10 +31,10 @@ variables:
 # the two most common types of steps are "script" and "task"
 steps:
 - task: UseDotNet@2
-  displayName: 'Use .NET $(sdkVersion) SDK'
+  displayName: 'Use .NET 2.x SDK'
   inputs:
     packageType: 'sdk'
-    version: $(sdkVersion)
+    version: 2.x
 
 - task: SonarCloudPrepare@1
   displayName: sonar prepare analysis
@@ -44,6 +44,12 @@ steps:
     scannerMode: 'MSBuild'
     projectKey: '2011-nov02-net_matthewg-project1'
     projectName: 'Project1 Store App'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET $(sdkVersion) SDK'
+  inputs:
+    packageType: 'sdk'
+    version: $(sdkVersion)
 
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: dotnet build
