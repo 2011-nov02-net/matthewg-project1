@@ -28,7 +28,7 @@ namespace Project1.DataModel.Repositories {
 
             var dbCustomer = new Customer() {
                 FirstName = customer.FirstName,
-                LastName =  customer.LastName,
+                LastName = customer.LastName,
                 Email = customer.Email
             };
 
@@ -283,7 +283,7 @@ namespace Project1.DataModel.Repositories {
             }
 
             return new Library.Models.Order() { Id = dbOrder.Id, Products = products, PricePaid = prices, Customer = customer, Location = location, Time = dbOrder.Date };
-        }  
+        }
 
         /// <summary>
         /// Retrieve all orders in the database
@@ -403,7 +403,7 @@ namespace Project1.DataModel.Repositories {
                     _dbContext.LocationInventories.Add(dbLocationInventory);
                 }
             }
-            
+
         }
 
         /// <summary>

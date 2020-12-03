@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Project1.DataModel.Models;
 using Project1.Library.Interfaces;
 using Project1.Library.Models;
 using Project1.WebApp.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 // TODO:
 //  search customers by name

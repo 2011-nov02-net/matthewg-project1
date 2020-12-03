@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace Project1.DataModel.Models {
-    public partial class LocationInventory
-    {
+    public partial class LocationInventory {
         public int LocationId { get; set; }
         public int ProductId { get; set; }
         public decimal Price { get; set; }

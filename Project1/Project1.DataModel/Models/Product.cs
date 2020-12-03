@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 #nullable disable
 
 namespace Project1.DataModel.Models {
-    public partial class Product
-    {
-        public Product()
-        {
+    public partial class Product {
+        public Product() {
             LocationInventories = new HashSet<LocationInventory>();
             OrderContents = new HashSet<OrderContent>();
         }

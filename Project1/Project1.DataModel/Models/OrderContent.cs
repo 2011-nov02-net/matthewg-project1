@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace Project1.DataModel.Models {
-    public partial class OrderContent
-    {
+    public partial class OrderContent {
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }

@@ -4,10 +4,8 @@ using System.Collections.Generic;
 #nullable disable
 
 namespace Project1.DataModel.Models {
-    public partial class Order
-    {
-        public Order()
-        {
+    public partial class Order {
+        public Order() {
             OrderContents = new HashSet<OrderContent>();
         }
 

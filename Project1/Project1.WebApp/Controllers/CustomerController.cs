@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Project1.Library.Interfaces;
 using Project1.Library.Models;
 using Project1.WebApp.Models;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Project1.WebApp.Controllers {
     public class CustomerController : Controller {
 
         private readonly IStoreRepository _repository;
-        
+
         public CustomerController(IStoreRepository repository) {
             _repository = repository;
         }

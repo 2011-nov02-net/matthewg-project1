@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Project1.Library.Interfaces;
 using Project1.Library.Models;
@@ -7,7 +6,6 @@ using Project1.WebApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Project1.WebApp.Controllers {
     public class OrderController : Controller {

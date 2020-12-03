@@ -1,9 +1,5 @@
-﻿using Project1.Library.Models;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Project1.WebApp.Models {
     public class LocationViewModel {
@@ -21,7 +17,7 @@ namespace Project1.WebApp.Models {
         public string City { get; set; }
 
         [StringLength(2)]
-        
+
         public string State { get; set; }
 
 
@@ -33,7 +29,7 @@ namespace Project1.WebApp.Models {
         [Phone]
         public string Phone { get; set; }
 
-        
+
         public Dictionary<int, int> Stock { get; set; }
 
 

@@ -1,19 +1,14 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
 namespace Project1.DataModel.Models {
-    public partial class TrainingProjectContext : DbContext
-    {
-        public TrainingProjectContext()
-        {
+    public partial class TrainingProjectContext : DbContext {
+        public TrainingProjectContext() {
         }
 
         public TrainingProjectContext(DbContextOptions<TrainingProjectContext> options)
-            : base(options)
-        {
+            : base(options) {
         }
 
         public virtual DbSet<Customer> Customers { get; set; }
@@ -23,10 +18,8 @@ namespace Project1.DataModel.Models {
         public virtual DbSet<OrderContent> OrderContents { get; set; }
         public virtual DbSet<Product> Products { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Customer>(entity =>
-            {
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+            modelBuilder.Entity<Customer>(entity => {
                 entity.ToTable("Customer");
 
                 entity.HasIndex(e => e.Email, "UQ__Customer__A9D10534D77F4233")
@@ -49,8 +42,7 @@ namespace Project1.DataModel.Models {
                     .HasDefaultValue(1);
             });
 
-            modelBuilder.Entity<Location>(entity =>
-            {
+            modelBuilder.Entity<Location>(entity => {
                 entity.ToTable("Location");
 
                 entity.Property(e => e.Address)
@@ -78,8 +70,7 @@ namespace Project1.DataModel.Models {
                     .IsFixedLength(true);
             });
 
-            modelBuilder.Entity<LocationInventory>(entity =>
-            {
+            modelBuilder.Entity<LocationInventory>(entity => {
                 entity.HasKey(e => new { e.LocationId, e.ProductId })
                     .HasName("PK__Location__2CBE68FB37490E56");
 
@@ -100,8 +91,7 @@ namespace Project1.DataModel.Models {
                     .HasConstraintName("FK__LocationI__Produ__12FDD1B2");
             });
 
-            modelBuilder.Entity<Order>(entity =>
-            {
+            modelBuilder.Entity<Order>(entity => {
                 entity.ToTable("Order");
 
                 entity.Property(e => e.Date).HasColumnType("datetime");
@@ -119,8 +109,7 @@ namespace Project1.DataModel.Models {
                     .HasConstraintName("FK__Order__LocationI__18B6AB08");
             });
 
-            modelBuilder.Entity<OrderContent>(entity =>
-            {
+            modelBuilder.Entity<OrderContent>(entity => {
                 entity.HasKey(e => new { e.OrderId, e.ProductId })
                     .HasName("PK__OrderCon__08D097A3AA0BD76A");
 
@@ -139,8 +128,7 @@ namespace Project1.DataModel.Models {
                     .HasConstraintName("FK__OrderCont__Produ__1C873BEC");
             });
 
-            modelBuilder.Entity<Product>(entity =>
-            {
+            modelBuilder.Entity<Product>(entity => {
                 entity.ToTable("Product");
 
                 entity.Property(e => e.Name)
