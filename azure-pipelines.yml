@@ -104,4 +104,4 @@ stages:
             azureSubscription: 'Azure subscription 1(7661b4a7-b474-45ce-b07e-9c051aac7045)'
             appType: 'webApp'
             WebAppName: '2011-goodman-store-app'
-            packageForLinux: 'Project1/publish'
+            packageForLinux: '$(System.ArtifactsDirectory)/app'
