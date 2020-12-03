@@ -10,6 +10,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
+// TODO:
+//  search customers by name
+//  display all order history of a location
+//  display all order history of a customer
+//  logging
+//  documentation
+
 namespace Project1.WebApp.Controllers {
     public class HomeController : Controller {
         private readonly ILogger<HomeController> _logger;
