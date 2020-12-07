@@ -44,6 +44,7 @@ namespace Project1.WebApp {
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseStaticFiles();
 
             app.UseAuthorization();
 

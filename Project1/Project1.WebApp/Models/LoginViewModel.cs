@@ -2,7 +2,8 @@
 
 namespace Project1.WebApp.Models {
     public class LoginViewModel {
-        [RegularExpression("^(.+)(@)(.+)[.](.+)$")]
+        // [RegularExpression("^(.+)(@)(.+)[.](.+)$")]
+        [EmailAddress]
         [Required]
         public string Email { get; set; }
     }

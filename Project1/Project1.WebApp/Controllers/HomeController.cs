@@ -45,6 +45,10 @@ namespace Project1.WebApp.Controllers {
             try {
                 var customer = _repository.GetCustomerByEmail(viewModel.Email);
 
+                if (customer is null) {
+                    ModelState.AddModelError("", $"No user exists with email address: {viewModel.Email}");
+                    return View(viewModel);
+                }
                 if (customer is Admin) {
                     TempData["IsAdmin"] = true;
                 }
