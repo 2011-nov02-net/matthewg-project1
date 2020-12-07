@@ -6,6 +6,22 @@
 
 <h1>Customer List</h1>
 
+<div>
+    <form asp-action="Index" method="GET">
+        <div class="form-group">
+            <label for="searchFirstName" class="control-label">First Name:</label>
+            <input type="search" class="form-control" id="search" name="searchFirstName" value="@ViewData["FirstName"]" placeholder="First Name" />
+        </div>
+        <div class="form-group">
+            <label for="searchLastName" class="control-label">Last Name:</label>
+            <input type="search" class="form-control" id="search" name="searchLastName" value="@ViewData["LastName"]" placeholder="Last Name" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+</div>
+
 <p>
     <a asp-action="Register">Add Customer</a>
 </p>

@@ -52,7 +52,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Location" asp-action="Index">Place Order</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index" asp-route-id="@TempData.Peek("CurrentCustomer")">History</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="Index">History</a>
                             </li>
                         }
                         @if (TempData.ContainsKey("IsAdmin")) {

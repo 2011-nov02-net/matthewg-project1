@@ -37,8 +37,15 @@
     </dl>
 </div>
 <div>
+    @if (TempData.ContainsKey("IsAdmin")) {
+        @Html.ActionLink("View Order History", "Index", "Order", new { searchCustomer = Model.Email })
+    } else {
+        @Html.ActionLink("View Order History", "Index", "Order")
+    }
+</div>
+<div>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
     @if (TempData.ContainsKey("IsAdmin")) {
-        @:| <a asp-action="Index">Back to List</a>
+        @:| @Html.ActionLink("Back to List", "Index")
     }
 </div>

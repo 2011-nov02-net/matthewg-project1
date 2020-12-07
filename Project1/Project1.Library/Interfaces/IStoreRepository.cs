@@ -5,7 +5,7 @@ namespace Project1.Library.Interfaces {
     public interface IStoreRepository {
         List<Location> GetLocations();
         IEnumerable<IUser> GetCustomers();
-        ICollection<Customer> GetCustomersByName(string firstName, string lastName);
+        IEnumerable<IUser> GetCustomersByName(string firstName, string lastName);
         List<Order> GetOrders();
         List<Product> GetProducts();
         Location GetLocationById(int id);

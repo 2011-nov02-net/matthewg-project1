@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Project1.DataModel.Models;
 using Project1.DataModel.Repositories;
 using Project1.Library.Interfaces;
@@ -24,7 +25,9 @@ namespace Project1.WebApp {
                 throw new InvalidOperationException("No connection string 'default' found.");
             }
             services.AddControllersWithViews();
-            services.AddDbContext<TrainingProjectContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<TrainingProjectContext>(options => options
+                .UseSqlServer(connectionString)
+                .LogTo(Console.WriteLine, LogLevel.Information));
 
             services.AddScoped<IStoreRepository, StoreRepository>();
         }
@@ -39,7 +42,6 @@ namespace Project1.WebApp {
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 

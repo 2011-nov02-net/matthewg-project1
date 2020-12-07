@@ -8,25 +8,23 @@ using System.Diagnostics;
 using System.Linq;
 
 // TODO:
-//  search customers by name
-//  display all order history of a location
-//  display all order history of a customer
-//  logging
 //  documentation
+//  unit tests
 
 namespace Project1.WebApp.Controllers {
     public class HomeController : Controller {
-        private readonly ILogger<HomeController> _logger;
         private readonly IStoreRepository _repository;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, IStoreRepository repository) {
-            _logger = logger;
+        public HomeController(IStoreRepository repository, ILogger<HomeController> logger) {
             _repository = repository;
+            _logger = logger;
         }
 
         public IActionResult Index() {
             var total = _repository.GetCustomers().Count();
             ViewData["TotalCustomers"] = total;
+            _logger.LogInformation($"Home/Index visited at {DateTime.Now}");
             return View();
         }
 
@@ -34,6 +32,7 @@ namespace Project1.WebApp.Controllers {
             if (TempData.ContainsKey("CurrentCustomer")) {
                 return RedirectToAction(nameof(Index));
             }
+            _logger.LogInformation($"Home/Login visited at {DateTime.Now}");
             return View();
         }
 
@@ -52,6 +51,7 @@ namespace Project1.WebApp.Controllers {
 
                 TempData["CurrentCustomer"] = customer.Id;
                 TempData["CustomerName"] = customer.FirstName;
+                _logger.LogInformation($"User [{customer.Id}] logged in at {DateTime.Now}");
                 return RedirectToAction(nameof(Index));
             } catch (Exception) {
                 ModelState.AddModelError("", "Invalid user login");
@@ -60,6 +60,7 @@ namespace Project1.WebApp.Controllers {
         }
 
         public IActionResult Logout() {
+            _logger.LogInformation($"User [{(int)TempData.Peek("CurrentCustomer")}] logged out at {DateTime.Now}");
             TempData.Clear();
             return RedirectToAction(nameof(Index));
         }

@@ -94,6 +94,9 @@
                             @string.Format("{0:c}", price)
                         }
                     </td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", "Product", new { id = item.Key })
+                    </td>
                 </tr>
             }
         </tbody>
@@ -102,6 +105,11 @@
 <div>
     @Html.ActionLink("Place Order", "Create", "Order", new { id = Model.Id })
 </div>
+@if (TempData.ContainsKey("IsAdmin")) {
+<div>
+    @Html.ActionLink("View Order History", "Index", "Order", new { searchLocation = Model.Id })
+</div>
+}
 <div>
     @if (TempData.ContainsKey("IsAdmin")) {
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|

@@ -10,7 +10,7 @@ namespace Project1.DataModel.Repositories {
         private readonly TrainingProjectContext _dbContext;
 
         public StoreRepository(TrainingProjectContext context) {
-            _dbContext = context ?? throw new ArgumentNullException("Null Context.");
+            _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         //
@@ -116,7 +116,11 @@ namespace Project1.DataModel.Repositories {
         /// <param name="id">Customer id</param>
         /// <returns>Business-Model customer object</returns>
         public IUser GetCustomerById(int id) {
-            var dbCustomer = _dbContext.Customers.First(c => c.Id == id);
+            var dbCustomer = _dbContext.Customers.FirstOrDefault(c => c.Id == id);
+
+            if (dbCustomer is null) {
+                return null;
+            }
 
             if (dbCustomer.Class == 2) {
                 return new Library.Models.Admin() {
@@ -141,10 +145,10 @@ namespace Project1.DataModel.Repositories {
         /// <param name="id">Customer email</param>
         /// <returns>Business-Model customer object</returns>
         public IUser GetCustomerByEmail(string s) {
-            var dbCustomer = _dbContext.Customers.First(c => c.Email == s);
+            var dbCustomer = _dbContext.Customers.FirstOrDefault(c => c.Email == s);
 
             if (dbCustomer is null) {
-                throw new ApplicationException($"No user matching email {s}");
+                return null;
             }
 
             if (dbCustomer.Class == 2) {
@@ -193,15 +197,37 @@ namespace Project1.DataModel.Repositories {
         /// <param name="firstName">Customer's first name</param>
         /// <param name="lastName">Customer's last name</param>
         /// <returns>A collection of Business-Model customer objects</returns>
-        public ICollection<Library.Models.Customer> GetCustomersByName(string firstName, string lastName) {
-            var dbCustomers = _dbContext.Customers.ToList();
-            return dbCustomers.Select(c => new Library.Models.Customer() {
+        public IEnumerable<IUser> GetCustomersByName(string firstName, string lastName) {
+            List<Customer> dbCustomers;
+            List<Customer> dbAdmins;
+
+            if (string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName)) {
+                return GetCustomers();
+            } else if (string.IsNullOrWhiteSpace(firstName)) {
+                dbCustomers = _dbContext.Customers.Where(c => c.Class == 1 && c.LastName == lastName).ToList();
+                dbAdmins = _dbContext.Customers.Where(c => c.Class == 2 && c.LastName == lastName).ToList();
+            } else if (string.IsNullOrWhiteSpace(lastName)) {
+                dbCustomers = _dbContext.Customers.Where(c => c.Class == 1 && c.FirstName == firstName).ToList();
+                dbAdmins = _dbContext.Customers.Where(c => c.Class == 2 && c.FirstName == firstName).ToList();
+            } else {
+                dbCustomers = _dbContext.Customers.Where(c => c.Class == 1 && c.LastName == lastName && c.FirstName == firstName).ToList();
+                dbAdmins = _dbContext.Customers.Where(c => c.Class == 2 && c.LastName == lastName && c.FirstName == firstName).ToList();
+            }
+
+            var customers = dbCustomers.Select(c => new Library.Models.Customer() {
                 Id = c.Id,
                 FirstName = c.FirstName,
                 LastName = c.LastName,
                 Email = c.Email
-            }).Where(c => c.FirstName.Contains(firstName, StringComparison.OrdinalIgnoreCase)
-                        && c.LastName.Contains(lastName, StringComparison.OrdinalIgnoreCase)).ToList();
+            }).ToList();
+            var admins = dbAdmins.Select(a => new Library.Models.Admin() {
+                Id = a.Id,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                Email = a.Email
+            }).ToList();
+
+            return customers.Concat<IUser>(admins).OrderBy(x => x.Id).ToList();
         }
 
         /// <summary>
@@ -213,7 +239,11 @@ namespace Project1.DataModel.Repositories {
             var dbLocation = _dbContext.Locations
                 .Include(l => l.LocationInventories)
                     .ThenInclude(li => li.Product)
-                .First(l => l.Id == id);
+                .FirstOrDefault(l => l.Id == id);
+
+            if (dbLocation is null) {
+                return null;
+            }
 
             Dictionary<int, int> stock = new Dictionary<int, int>();
             Dictionary<int, decimal> prices = new Dictionary<int, decimal>();
@@ -257,7 +287,11 @@ namespace Project1.DataModel.Repositories {
                 .Include(o => o.Customer)
                 .Include(o => o.OrderContents)
                     .ThenInclude(oc => oc.Product)
-                .First(o => o.Id == id);
+                .FirstOrDefault(o => o.Id == id);
+
+            if (dbOrder is null) {
+                return null;
+            }
 
             var location = new Library.Models.Location(
                 dbOrder.Location.Name,
@@ -303,6 +337,9 @@ namespace Project1.DataModel.Repositories {
         /// </summary>
         /// <returns>A list of Business-Model order objects</returns>
         public List<Library.Models.Order> GetCustomerOrders(IUser customer) {
+            if (customer is null) {
+                return new List<Library.Models.Order>();
+            }
             var dbOrders = _dbContext.Orders
                 .Where(o => o.CustomerId == customer.Id)
                 .OrderByDescending(o => o.Id).ToList();
@@ -318,6 +355,9 @@ namespace Project1.DataModel.Repositories {
         /// </summary>
         /// <returns>A group of Business-Model order objects</returns>
         public List<Library.Models.Order> GetLocationOrders(Library.Models.Location location) {
+            if (location is null) {
+                return new List<Library.Models.Order>();
+            }
             var dbOrders = _dbContext.Orders
                 .Where(o => o.LocationId == location.Id)
                 .OrderByDescending(o => o.Date).ToList();
@@ -334,7 +374,11 @@ namespace Project1.DataModel.Repositories {
         /// <param name="id">Product id</param>
         /// <returns>Business-Model product object</returns>
         public Library.Models.Product GetProductById(int id) {
-            var dbProduct = _dbContext.Products.First(p => p.Id == id);
+            var dbProduct = _dbContext.Products.FirstOrDefault(p => p.Id == id);
+
+            if (dbProduct is null) {
+                return null;
+            }
 
             return new Library.Models.Product() {
                 Id = dbProduct.Id,
@@ -385,6 +429,9 @@ namespace Project1.DataModel.Repositories {
         /// <param name="product">Business-Model product object</param>
         /// <param name="qty">integer number of items to add</param>
         public void UpdateLocationStock(Library.Models.Location location) {
+            if (location is null) {
+                throw new ArgumentNullException(nameof(location));
+            }
             foreach (var product in location.Stock) {
                 int productId = product.Key;
                 LocationInventory dbLocationInventory;
@@ -392,8 +439,18 @@ namespace Project1.DataModel.Repositories {
                     dbLocationInventory = _dbContext.LocationInventories.First(x => x.LocationId == location.Id && x.ProductId == productId);
                     dbLocationInventory.Stock = location.Stock[productId];
                 } catch (InvalidOperationException) {
-                    var dbLocation = _dbContext.Locations.First(l => l.Id == location.Id);
-                    var dbProduct = _dbContext.Products.First(p => p.Id == productId);
+                    var dbLocation = _dbContext.Locations.FirstOrDefault(l => l.Id == location.Id);
+
+                    if (dbLocation is null) {
+                        throw new InvalidOperationException("Tried to update stock of a nonexistent location.");
+                    }
+
+                    var dbProduct = _dbContext.Products.FirstOrDefault(p => p.Id == productId);
+
+                    if (dbProduct is null) {
+                        throw new InvalidOperationException("Tried to update stock of a nonexistent product.");
+                    }
+
                     dbLocationInventory = new LocationInventory() {
                         Location = dbLocation,
                         Product = dbProduct,
@@ -414,7 +471,12 @@ namespace Project1.DataModel.Repositories {
         /// <param name="lastName">new last name, remains unchanged if null</param>
         /// <param name="email">new email address, remains unchanged if null</param>
         public void UpdateCustomer(IUser customer, string firstName, string lastName, string email) {
-            var dbCustomer = _dbContext.Customers.First(c => c.Id == customer.Id);
+            var dbCustomer = _dbContext.Customers.FirstOrDefault(c => c.Id == customer.Id);
+
+            if (dbCustomer is null) {
+                throw new InvalidOperationException("Tried to update a nonexistent customer.");
+            }
+
             dbCustomer.FirstName = firstName ?? dbCustomer.FirstName;
             dbCustomer.LastName = lastName ?? dbCustomer.LastName;
             dbCustomer.Email = email ?? dbCustomer.Email;
