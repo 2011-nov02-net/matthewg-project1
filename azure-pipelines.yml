@@ -91,18 +91,19 @@ stages:
   - deployment: app_service
     environment: prod
     strategy:
-     runOnce:
-       deploy:
-         steps:
-         - download: current
-           artifact: app
-           displayName: download app
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: app
+            displayName: download app
 
-         - task: AzureRmWebAppDeployment@4
-           displayName: azure app service deploy
-           inputs:
-            ConnectionType: 'AzureRM'
-            azureSubscription: 'Azure subscription 1(7661b4a7-b474-45ce-b07e-9c051aac7045)'
-            appType: 'webApp'
-            WebAppName: '2011-goodman-store-app'
-            packageForLinux: '$(Pipeline.Workspace)/app'
+          - task: AzureRmWebAppDeployment@4
+            displayName: azure app service deploy
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure subscription 1(7661b4a7-b474-45ce-b07e-9c051aac7045)'
+              appType: 'webApp'
+              WebAppName: '2011-goodman-store-app'
+              packageForLinux: '$(Pipeline.Workspace)/app'
+              DeploymentType: 'zipDeploy'
