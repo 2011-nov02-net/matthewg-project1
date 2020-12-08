@@ -24,7 +24,7 @@ namespace Project1.Library.Models {
         }
 
         /// <summary>
-        /// Add a product and quantity to a customer's cart, subtracting it from the store's stock
+        /// Add a product and quantity to a customer's cart
         /// </summary>
         /// <param name="product">Product object to be added to the cart</param>
         /// <param name="qty">Integer amount to be added</param>
@@ -33,20 +33,19 @@ namespace Project1.Library.Models {
             if (qty < 1) {
                 return false;
             }
-            if (CurrentLocation.Stock.ContainsKey(productId) && CurrentLocation.Stock[productId] >= qty) {
+            if (CurrentLocation.Stock.ContainsKey(productId) && CurrentLocation.Stock[productId] >= qty + (Cart?[productId] ?? 0)) {
                 if (Cart.ContainsKey(productId)) {
                     Cart[productId] += qty;
                 } else {
                     Cart.Add(productId, qty);
                 }
-                CurrentLocation.AddStock(productId, -qty);
                 return true;
             }
             return false;
         }
 
         /// <summary>
-        /// Remove an amount of some product from a customer's cart, adding it back to the store's stock
+        /// Remove an amount of some product from a customer's cart
         /// </summary>
         /// <param name="product">Product object to be removed from the cart</param>
         /// <param name="qty">Integer amount to be removed</param>
@@ -62,7 +61,6 @@ namespace Project1.Library.Models {
                 } else if (Cart[productId] == qty) {
                     Cart.Remove(productId);
                 }
-                CurrentLocation.AddStock(productId, qty);
                 return true;
             }
             return false;

@@ -7,31 +7,33 @@
 <h1>Order History</h1>
 
 @if (TempData.ContainsKey("IsAdmin")) {
-<div>
+<div class="container">
     <form asp-action="Index" method="GET">
-        <div class="form-group">
-            <label for="searchLocation" class="control-label">Location:</label>
-            <select class="form-control" id="search" name="searchLocation">
-                @if ((int)ViewData["Location"] == 0) {
-                    <option value="0" selected>All</option>
-                } else {
-                    <option value="0">All</option>
-                }
-                @foreach (var loc in ViewData["Locations"] as List<Project1.Library.Models.Location>) {
-                    if ((int)ViewData["Location"] == loc.Id) {
-                        <option value="@loc.Id" selected>@loc.Id - @loc.Name</option>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label for="searchLocation" class="control-label">Location:</label>
+                <select class="form-control" id="search" name="searchLocation">
+                    @if ((int)ViewData["Location"] == 0) {
+                        <option value="0" selected>All</option>
                     } else {
-                        <option value="@loc.Id">@loc.Id - @loc.Name</option>
+                        <option value="0">All</option>
                     }
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="searchCustomer" class="control-label">Customer:</label>
-            <input type="search" class="form-control" id="search" name="searchCustomer" value="@ViewData["Customer"]" placeholder="Customer Email Address" />
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Search</button>
+                    @foreach (var loc in ViewData["Locations"] as List<Project1.Library.Models.Location>) {
+                        if ((int)ViewData["Location"] == loc.Id) {
+                            <option value="@loc.Id" selected>@loc.Id - @loc.Name</option>
+                        } else {
+                            <option value="@loc.Id">@loc.Id - @loc.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="searchCustomer" class="control-label">Customer:</label>
+                <input type="search" class="form-control" id="search" name="searchCustomer" value="@ViewData["Customer"]" placeholder="Customer Email Address" />
+            </div>
+            <div class="form-group col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
         </div>
     </form>
 </div>

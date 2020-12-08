@@ -38,14 +38,15 @@
 </div>
 <div>
     @if (TempData.ContainsKey("IsAdmin")) {
-        @Html.ActionLink("View Order History", "Index", "Order", new { searchCustomer = Model.Email })
+        @Html.ActionLink("View Order History", "Index", "Order", new { searchCustomer = Model.Email }, new { @class = "btn btn-primary" })
     } else {
-        @Html.ActionLink("View Order History", "Index", "Order")
+        @Html.ActionLink("View Order History", "Index", "Order", null, new { @class = "btn btn-primary" })
     }
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+<hr />
+<div class="">
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
     @if (TempData.ContainsKey("IsAdmin")) {
-        @:| @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Back to List", "Index", null, null, new { @class = "btn btn-primary" })
     }
 </div>

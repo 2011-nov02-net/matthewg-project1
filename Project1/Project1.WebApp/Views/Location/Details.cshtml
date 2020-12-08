@@ -59,6 +59,10 @@
             @Html.DisplayFor(model => model.Phone)
         </dd>
     </dl>
+    <div>
+        @Html.ActionLink("Place Order", "Create", "Order", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    </div>
+    <br />
     <table class="table">
         <thead>
             <tr>
@@ -95,7 +99,7 @@
                         }
                     </td>
                     <td>
-                        @Html.ActionLink("Details", "Details", "Product", new { id = item.Key })
+                        @Html.ActionLink("Product Details", "Details", "Product", new { id = item.Key }, new { @class = "btn btn-primary" })
                     </td>
                 </tr>
             }
@@ -103,16 +107,14 @@
     </table>
 </div>
 <div>
-    @Html.ActionLink("Place Order", "Create", "Order", new { id = Model.Id })
+    @if (TempData.ContainsKey("IsAdmin")) {
+        @Html.ActionLink("View Order History", "Index", "Order", new { searchLocation = Model.Id }, new { @class = "btn btn-primary" })
+    }
 </div>
-@if (TempData.ContainsKey("IsAdmin")) {
-<div>
-    @Html.ActionLink("View Order History", "Index", "Order", new { searchLocation = Model.Id })
-</div>
-}
+<hr />
 <div>
     @if (TempData.ContainsKey("IsAdmin")) {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
     }
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>

@@ -8,8 +8,8 @@ using System.Diagnostics;
 using System.Linq;
 
 // TODO:
-//  documentation
-//  unit tests
+//  unit test StoreRepository
+//  add custom css styling
 
 namespace Project1.WebApp.Controllers {
     public class HomeController : Controller {

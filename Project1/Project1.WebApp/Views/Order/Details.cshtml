@@ -78,10 +78,11 @@
         Total: @Html.DisplayFor(model => model.TotalPrice)
     </p>
 </div>
+<hr />
 <div>
     @if (TempData.ContainsKey("IsAdmin")) {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) @:|
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" })
     }
 
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Index">Back to List</a>
 </div>

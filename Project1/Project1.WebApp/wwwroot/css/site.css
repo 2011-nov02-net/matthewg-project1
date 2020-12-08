@@ -1,27 +1,60 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+.dark-mode {
+    background-color: rgb(36, 41, 46) !important;
+    color: rgb(157, 165, 180) !important;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
 }
 
+.border-bottom {
+    border-bottom: 1px solid rgba(30, 30, 30, 177) !important;
+}
+
+.border-top {
+    border-top: 1px solid rgba(30, 30, 30, 177) !important;
+}
+
+.form-control {
+    background-color: rgb(66, 69, 73) !important;
+    color: rgb(214, 216, 218) !important;
+    border: 1px solid rgba(30, 30, 30, 177) !important;
+}
+
+.table {
+    color: rgb(157, 165, 180) !important;
+    border-color: rgba(30, 30, 30, 177) !important;
+}
+
+.table thead th {
+    border-bottom: 2px solid rgb(66, 69, 73) !important;
+}
+
+.table td, .table th {
+    border-top: 1px solid rgb(66, 69, 73) !important;
+}
+
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: rgb(214, 216, 218) !important;
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: rgb(214, 216, 218) !important;
+    background-image: linear-gradient(-180deg, rgb(83, 86, 89) 0%, rgb(66, 69, 73) 90%) !important;
+    background-color: rgb(66, 69, 73) !important;
+    border-color: rgb(66, 69, 73) !important;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    color: rgb(214, 216, 218) !important;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
 /* Sticky footer styles
