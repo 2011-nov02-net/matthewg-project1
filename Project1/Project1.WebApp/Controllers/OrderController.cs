@@ -144,6 +144,10 @@ namespace Project1.WebApp.Controllers {
                 }
 
                 foreach (var item in order.Products) {
+                    if (item.Value == 0) {
+                        order.Products.Remove(item.Key);
+                        continue;
+                    }
                     location.AddStock(item.Key, -item.Value);
                 }
 
