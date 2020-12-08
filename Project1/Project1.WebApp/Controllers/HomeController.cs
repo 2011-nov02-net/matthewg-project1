@@ -9,7 +9,6 @@ using System.Linq;
 
 // TODO:
 //  unit test StoreRepository
-//  add custom css styling
 
 namespace Project1.WebApp.Controllers {
     public class HomeController : Controller {
