@@ -3,6 +3,7 @@ Matt Goodman's Revature Training Project 1
 
 <h2>Overview</h2>
 This project implements a basic web-based store application where users can place orders for products at various store locations.
+
 <strong>Technologies:</strong>
 <ul>
   <li>.NET 5</li>
@@ -13,6 +14,7 @@ This project implements a basic web-based store application where users can plac
   <li>Azure App Service</li>
   <li>Azure DevOps</li>
 </ul>
+
 <strong>Features:</strong>
 <ul>
   <li>Place orders to store locations for customers</li>
